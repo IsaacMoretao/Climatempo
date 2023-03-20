@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Previsoes {
+  id                String @id @default(cuid())
+  date              String
+  text              String
+  tempMin           Int
+  tempMax           Int
+  rainProbabilit    Int
+  rainPrecipitation Int
+  periodBegin       String
+  periodEnd         String
+
+  local_id String
+  local    Locality @relation(fields: [local_id], references: [id])
+
+  @@map("previsoes")
+}
+
+model Locality {
+  id        String @id @default(cuid())
+  name      String
+  state     String
+  latitude  String
+  Longitude String
+
+  previsoes Previsoes[]
+
+  @@map("locality")
+}
